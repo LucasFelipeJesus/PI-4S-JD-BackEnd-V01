@@ -7,7 +7,7 @@ const db1DataSource = new DataSource({
     port: 1433,
     username: "lucasjesus01",
     password: "Caslueisla!",
-    database: "bd-sql-01",
+    database: "bdsql-api-4s-v01",
     options: {
         encrypt: true,
         trustServerCertificate: false
