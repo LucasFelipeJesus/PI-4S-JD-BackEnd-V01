@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import Equipments from "./equipments.entity";
 
 @Entity()
@@ -15,8 +15,8 @@ export default class item_Equipment extends BaseEntity {
     @Column()
     Equipment_id!: number;
 
-    @ManyToMany(() => Equipments, equipments => equipments.id_equipment)
-    equipments!: Equipments[];
+    @ManyToOne(() => Equipments, equipment => equipment.item_equipments)
+    equipments!: Equipments;
 
 
 

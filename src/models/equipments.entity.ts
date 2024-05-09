@@ -1,9 +1,9 @@
-import { BaseEntity, Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import item_Equipment from "./item_equipment.entity";
 
 
 @Entity()
-export default class Equipments extends BaseEntity {
+export default class Equipment extends BaseEntity {
     @PrimaryGeneratedColumn()
     id_equipment!: number;
 
@@ -19,7 +19,7 @@ export default class Equipments extends BaseEntity {
     @Column()
     item_equipment_id!: number;
 
-    @ManyToMany(() => item_Equipment, item_equipment => item_equipment.id_item_equipment)
-    item_equipment!: item_Equipment[];
+    @ManyToOne(() => item_Equipment, item_equipment => item_equipment.equipments)
+    item_equipments!: item_Equipment[];
 
 }

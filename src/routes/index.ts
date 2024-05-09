@@ -1,11 +1,10 @@
-import { Router } from 'express'
+import { Router } from "express"
+import equipmentsRoutes from "./equipments/equipments.routes"
+
 
 
 const routes = Router()
 
-routes.get('/', (req, res) => {
-    return res.json({ message: 'Hello World' })
-})
-
+routes.use('/equipments', equipmentsRoutes)
 
 export default routes
