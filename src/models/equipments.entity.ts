@@ -16,6 +16,9 @@ export default class Equipments extends BaseEntity {
     @Column()
     category!: string;
 
+    @Column()
+    item_equipment_id!: number;
+
     @ManyToMany(() => item_Equipment, item_equipment => item_equipment.id_item_equipment)
     item_equipment!: item_Equipment[];
 

@@ -12,6 +12,9 @@ export default class item_Equipment extends BaseEntity {
     @Column()
     code!: string;
 
+    @Column()
+    Equipment_id!: number;
+
     @ManyToMany(() => Equipments, equipments => equipments.id_equipment)
     equipments!: Equipments[];
 

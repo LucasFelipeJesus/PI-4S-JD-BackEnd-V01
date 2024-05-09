@@ -1,5 +1,6 @@
 import express from "express"
 import db1DataSource from "./database/ormconfig"
+import db2DataSource from "./database/ormconfig"
 import routes from "./routes"
 import cors from "cors"
 
@@ -13,6 +14,7 @@ app.use(cors())
 
 app.listen(port, () => {
     console.log(`Servidor executando na porta ${port}`);
-
     console.log(db1DataSource.isInitialized ? 'Banco Sqlserver Dados OK! :' : 'Banco Sqlserver Carregando!')
+
+    console.log(db2DataSource.isInitialized ? 'Banco Sqllite Dados OK! :' : 'Banco Sqlite Carregando!')
 })
