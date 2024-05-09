@@ -16,7 +16,8 @@ const db1DataSource = new DataSource({
     synchronize: true,
     entities:
         [
-            join(__dirname, '..', '.src/models/*.{ts,js} ')
+
+            join(__dirname, '..', 'models/*.{ts,js}')
         ]
 })
 
