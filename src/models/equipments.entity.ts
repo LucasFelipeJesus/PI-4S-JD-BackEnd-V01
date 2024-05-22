@@ -1,5 +1,7 @@
-import { BaseEntity, Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import item_Equipment from "./item_equipment.entity";
+import { BaseEntity, Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import Checklist from "./checklist.entity";
+
+
 
 
 @Entity()
@@ -16,10 +18,26 @@ export default class Equipment extends BaseEntity {
     @Column()
     category!: string;
 
-    @Column()
-    item_equipment_id!: number;
+    @ManyToOne(() => Checklist, checklist => checklist.equipments)
+    checklist?: Checklist;
 
-    @ManyToOne(() => item_Equipment, item_equipment => item_equipment.equipments)
-    item_equipments!: item_Equipment[];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
