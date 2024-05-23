@@ -1,25 +1,26 @@
 import Checklist from "../../models/checklist.entity";
-import Item_Checklist from "../../models/item_checklist.entity";
+
 
 
 export default class ChecklistController {
     static async create(req: any, res: any) {
-        const { description, id_item_checklist } = req.body;
+        const { description, id_equipment } = req.body;
 
-        if (!description || !id_item_checklist) {
+        if (!description || !id_equipment) {
             return res.status(400).json({ message: 'Campos (descrição e id do item do checklist) obrigatórios' });
         }
         const checklist = new Checklist()
         checklist.description = description
-        checklist.item_checklist = id_item_checklist
+        checklist.equipment = id_equipment
+
 
         await checklist.save()
         return res.status(201).json(checklist);
     }
 
     static async index(req: any, res: any) {
-        const checklists = await Checklist.find()
-        return res.status(200).json(checklists)
+        const checklists = await Checklist.find({ relations: ['item_checklist'] });
+        return res.status(200).json(checklists);
     }
 
     static async show(req: any, res: any) {

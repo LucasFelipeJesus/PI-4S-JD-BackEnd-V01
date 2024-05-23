@@ -5,7 +5,7 @@ export default class EquipmentsController {
     static async create(req: Request, res: Response) {
         const { description, model, category, id_checklist } = req.body;
 
-        if (!description || !model || !category || !id_checklist) {
+        if (!description || !model || !category) {
             return res.status(400).json({ message: 'Campos (descrição, modelo, categoria e id do checklist ) obrigatórios' });
         }
 
@@ -13,7 +13,6 @@ export default class EquipmentsController {
         equipment.description = description
         equipment.model = model
         equipment.category = category
-        equipment.checklist = id_checklist
 
 
         await equipment.save()
@@ -21,7 +20,7 @@ export default class EquipmentsController {
     }
 
     static async index(req: Request, res: Response) {
-        const equipments = await Equipment.find()
+        const equipments = await Equipment.find({ relations: ['checklist'] })
         return res.status(200).json(equipments);
     }
 

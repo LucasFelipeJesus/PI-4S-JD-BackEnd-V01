@@ -4,14 +4,15 @@ import Item_Checklist from "../../models/item_checklist.entity";
 
 export default class itemChecklistController {
     static async create(req: Request, res: Response) {
-        const { description } = req.body;
+        const { description, id_checklist } = req.body;
 
-        if (!description) {
+        if (!description || !id_checklist) {
             return res.status(400).json({ message: 'Campos obrigatórios' });
         }
 
         const item_check = new Item_check()
         item_check.description = description
+        item_check.checklist = id_checklist
 
         await item_check.save()
         return res.status(201).json(item_check);
