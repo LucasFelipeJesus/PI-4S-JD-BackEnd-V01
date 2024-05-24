@@ -1,5 +1,5 @@
 import { Router } from "express";
-import ChecklistController from "../../controllers/checklist/checklist_Controller";
+import ChecklistController from "../../controllers/checklist/checklistController";
 
 const checklistRoutes = Router();
 

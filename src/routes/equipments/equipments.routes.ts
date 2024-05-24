@@ -3,7 +3,7 @@ import equipmentsController from "../../controllers/equipments/equipmentsControl
 
 const equipmentsRoutes = Router();
 
-equipmentsRoutes.post('/', equipmentsController.create)
+equipmentsRoutes.post('/', equipmentsController.store)
 equipmentsRoutes.get('/', equipmentsController.index)
 equipmentsRoutes.get('/:id', equipmentsController.show)
 equipmentsRoutes.delete('/:id', equipmentsController.delete)

@@ -5,6 +5,11 @@ import Item_Checklist from "../../models/item_checklist.entity";
 export default class itemChecklistController {
     static async create(req: Request, res: Response) {
         const { description, id_checklist } = req.body;
+        const { id_user } = req.headers;
+
+        if (!id_user) {
+            return res.status(400).json({ message: 'Usuário não autenticado' });
+        }
 
         if (!description || !id_checklist) {
             return res.status(400).json({ message: 'Campos obrigatórios' });
@@ -19,12 +24,21 @@ export default class itemChecklistController {
     }
 
     static async index(req: Request, res: Response) {
+        const { id_user } = req.headers;
+        if (!id_user) {
+            return res.status(400).json({ message: 'Usuário não autenticado' });
+        }
         const itens_check = await Item_Checklist.find()
         return res.status(200).json(itens_check);
     }
 
     static async show(req: Request, res: Response) {
         const { id_item_checklist } = req.params;
+        const { id_user } = req.headers;
+
+        if (!id_user) {
+            return res.status(400).json({ message: 'Usuário não autenticado' });
+        }
 
         if (!id_item_checklist || isNaN(Number(id_item_checklist))) {
             return res.status(400).json({ message: 'ID é obrigatório' });
@@ -37,6 +51,11 @@ export default class itemChecklistController {
 
     static async delete(req: Request, res: Response) {
         const { id } = req.params // const id = req.params.id  
+        const { id_user } = req.headers;
+
+        if (!id_user) {
+            return res.status(400).json({ message: 'Usuário não autenticado' });
+        }
         if (!id || isNaN(Number(id))) {
             return res.status(400).json({ error: 'O id é obrigatório!' })
         }
@@ -52,6 +71,11 @@ export default class itemChecklistController {
     static async update(req: Request, res: Response) {
         const { id } = req.params
         const { description } = req.body
+        const { id_user } = req.headers;
+
+        if (!id_user) {
+            return res.status(400).json({ message: 'Usuário não autenticado' });
+        }
 
         if (!description) {
             return res.status(400).json({ message: ' Descrição: Campo obrigatórios' });
@@ -69,7 +93,5 @@ export default class itemChecklistController {
         await itens_check.save()
         return res.status(204).json()
     }
-
-
 
 }
