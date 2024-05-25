@@ -14,8 +14,6 @@ export default class Evidence extends BaseEntity {
     @Column({ nullable: true })
     description!: string;
 
-    @Column()
-    id_user!: number;
 
     @ManyToOne(() => ItemSurvey, ItemSurvey => ItemSurvey.evidence)
     item_survey!: ItemSurvey;

@@ -18,8 +18,6 @@ export default class Survey extends BaseEntity {
     @Column()
     date_end?: Date;
 
-    @Column()
-    id_user!: number;
 
     @OneToMany(() => User, user => user.survey)
     user?: User[];

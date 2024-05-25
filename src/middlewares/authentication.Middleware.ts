@@ -18,7 +18,7 @@ export default async function authenticationMiddleware(req: Request, res: Respon
         return res.status(401).json({ error: 'Token expirado' });
     }
 
-    req.headers.iduser = userToken.user.iduser.toString();
+    req.headers.authorization = userToken.token
 
     next();
 }

@@ -13,9 +13,6 @@ export default class Checklist extends BaseEntity {
     @Column()
     description!: string;
 
-    @Column()
-    id_user!: number;
-
     @OneToMany(() => Item_Checklist, item_checklist => item_checklist.checklist)
     item_checklist!: Item_Checklist[];
 

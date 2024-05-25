@@ -3,6 +3,16 @@ import { Request, Response } from "express";
 class EvidenceController {
 
     public store(req: Request, res: Response) {
+        const { observation, status, id_survey } = req.body;
+        const { authorization } = req.headers;
+
+        if (!authorization) {
+            return res.status(400).json({ message: 'Usuário não autenticado' });
+        }
+
+        if (!observation || !status || !id_survey) {
+            return res.status(400).json({ message: 'Campos (observação , status e id da vistoria) obrigatórios' });
+        }
         if (req.file) {
             return res.json({ response: req.file });
         }
@@ -12,6 +22,8 @@ class EvidenceController {
             response: 'Arquivo não suportado!',
 
         });
+
+
     }
 
     public show(req: Request, res: Response) {

@@ -14,9 +14,6 @@ export default class ItemSurvey extends BaseEntity {
     status!: boolean;
 
     @Column()
-    id_user!: number;
-
-    @Column()
     photo!: string;
 
     @ManyToOne(() => Survey, survey => survey.item_survey)
