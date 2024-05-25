@@ -1,27 +1,25 @@
-import Checklist from "../../models/checklist.entity";
-import Equipment from "../../models/equipments.entity";
-import Item_Checklist from "../../models/item_checklist.entity";
-import ItemSurvey from "../../models/item_survey.entity";
+
 import Survey from "../../models/survey.entity";
 import { Request, Response } from 'express';
 
 
 export default class SurveysController {
     static async store(req: Request, res: Response) {
-        const { description, date_start, date_end } = req.body;
+        const { description, date_start, date_end, iduser } = req.body;
         const { authorization } = req.headers;
 
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
-        if (!description || !date_start! || !date_end!) {
-            return res.status(400).json({ message: 'Campos (descrição data de inicio e fim  ) são obrigatórios' });
+        if (!description || !date_start! || !date_end! || !iduser!) {
+            return res.status(400).json({ message: 'Campos (descrição data de inicio e fim  e usuário ) são obrigatórios' });
         }
         const survey = new Survey()
         survey.description = description
         survey.date_start = date_start
         survey.date_end = date_end
+        survey.user = iduser
 
 
         await survey.save()

@@ -5,7 +5,7 @@ import Token from '../../models/token.entity';
 
 export default class AuthenticationController {
     static async store(req: Request, res: Response) {
-        const { name, email, password } = req.body;
+        const { name, email, password, id_survey } = req.body;
 
         if (!name || !email || !password) {
             return res.status(400).json({ message: 'Campos (nome email e senha) são obrigatórios' });
@@ -18,6 +18,7 @@ export default class AuthenticationController {
         user.name = name
         user.email = email
         user.password = bycrypt.hashSync(password, 10)
+        user.survey = id_survey
         await user.save()
         return res.status(201).json({
             id: user.iduser,
@@ -65,6 +66,8 @@ export default class AuthenticationController {
 
     }
 
+
+
     static async refresh(req: Request, res: Response) {
         const { authorization } = req.cookies;
         if (!authorization) {
@@ -109,12 +112,22 @@ export default class AuthenticationController {
     }
 
     static async index(req: Request, res: Response) {
-        const { id } = req.headers;
-        if (!id) {
+        const { authorization } = req.headers;
+
+        if (!authorization) {
             return res.status(400).json({ error: 'Usuário não autenticado!' });
         }
-        const users = await User.find({ where: { iduser: Number(id) } })
-        return res.status(200).json(users);
+
+        const users = await User.find({ relations: ['survey'] });
+        const usersFiltered = users.map(user => {
+            return {
+                id: user.iduser,
+                name: user.name,
+                email: user.email,
+                survey: user.survey
+            }
+        })
+        return res.status(200).json(usersFiltered);
     }
 
     static async show(req: Request, res: Response) {
@@ -156,7 +169,7 @@ export default class AuthenticationController {
 
     static async update(req: Request, res: Response) {
         const { id } = req.params
-        const { name, email, password } = req.body
+        const { name, email, password, id_survey } = req.body
         const { authorization } = req.headers;
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado!' });
@@ -176,6 +189,7 @@ export default class AuthenticationController {
         user.name = name
         user.email = email
         user.password = bycrypt.hashSync(password, 10)
+        user.survey = id_survey
         await user.save()
         return res.status(204).json()
     }
