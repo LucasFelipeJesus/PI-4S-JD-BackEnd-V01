@@ -31,20 +31,8 @@ export default class SurveysController {
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
-        const surveys = await Survey.find({ relations: ['item_survey'] && ['equipment'] && ['equipment.checklist'] && ['equipment.checklist.item_checklist'] });
-        const surveysFiltered = surveys.map(survey => {
-            return {
-                id_survey: survey.id_survey,
-                description: survey.description,
-                date_start: survey.date_start,
-                date_end: survey.date_end,
-                survey: survey.item_survey,
-                equipment: survey.equipment,
-
-
-            }
-        })
-        return res.status(200).json(surveysFiltered);
+        const surveys = await Survey.find({ relations: ['item_survey', 'equipment', 'equipment.checklist', 'equipment.checklist.item_checklist'] });
+        return res.status(200).json(surveys);
     }
 
     static async show(req: Request, res: Response) {
@@ -58,24 +46,13 @@ export default class SurveysController {
         if (!id || isNaN(Number(id))) {
             return res.status(400).json({ message: 'ID é obrigatório' });
         }
-        const surveys = await Survey.find({ where: { id_survey: Number(id) }, relations: ['item_survey'] && ['equipment'] && ['equipment.checklist'] && ['equipment.checklist.item_checklist'] });
+        const surveys = await Survey.find({ where: { id_survey: Number(id) }, relations: ['item_survey', 'equipment', 'equipment.checklist', 'equipment.checklist.item_checklist'] });
         //const survey = await Survey.findOne({ where: { id_survey: Number(id) }, relations: ['item_survey'] })
-        const surveysFiltered = surveys.map(survey => {
-            return {
-                id_survey: survey.id_survey,
-                description: survey.description,
-                date_start: survey.date_start,
-                date_end: survey.date_end,
-                survey: survey.item_survey,
-                equipment: survey.equipment,
 
-
-            }
-        })
-        if (!surveysFiltered) {
+        if (!surveys) {
             return res.status(404).json({ erro: 'Vistoria não encontrada' });
         }
-        return res.json(surveysFiltered);
+        return res.json(surveys);
     }
 
 

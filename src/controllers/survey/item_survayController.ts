@@ -12,8 +12,16 @@ export default class ItemSurveyController {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
-        if (!observation || !status || !id_survey) {
-            return res.status(400).json({ message: 'Campos (observação, status e id da vistoria) obrigatórios' });
+        if (!observation) {
+            return res.status(400).json({ message: 'Campos (observação) obrigatório' });
+        }
+
+        if (!status) {
+            return res.status(400).json({ message: 'Campos (status) obrigatório' });
+        }
+
+        if (!id_survey || isNaN(Number(id_survey))) {
+            return res.status(400).json({ message: 'ID da vistoria é obrigatório' });
         }
         const survey = await Survey.findOne({ where: { id_survey } });
 
