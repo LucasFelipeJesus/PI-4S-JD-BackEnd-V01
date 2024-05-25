@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import User from '../../models/user.entity';
 import bycrypt from 'bcrypt';
 import Token from '../../models/token.entity';
+import ItemSurvey from '../../models/item_survey.entity';
 
 export default class AuthenticationController {
     static async store(req: Request, res: Response) {
@@ -118,16 +119,8 @@ export default class AuthenticationController {
             return res.status(400).json({ error: 'Usuário não autenticado!' });
         }
 
-        const users = await User.find({ relations: ['survey'] });
-        const usersFiltered = users.map(user => {
-            return {
-                id: user.iduser,
-                name: user.name,
-                email: user.email,
-                survey: user.survey
-            }
-        })
-        return res.status(200).json(usersFiltered);
+        const users = await User.find({ relations: ['survey', 'survey.item_survey', 'survey.equipment', 'survey.equipment.checklist', 'survey.equipment.checklist.item_checklist'] });
+        return res.status(200).json(users);
     }
 
     static async show(req: Request, res: Response) {

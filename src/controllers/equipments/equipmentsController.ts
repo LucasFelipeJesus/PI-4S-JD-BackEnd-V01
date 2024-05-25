@@ -40,22 +40,7 @@ export default class EquipmentsController {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
-        const equipments = await Equipment.find({ relations: ['checklist'] && ['checklist.item_checklist'] && ['survey'] && ['survey.item_survey'] })
-        const equipmentsFiltered = equipments.map(equipment => {
-            return {
-                id_equipment: equipment.id_equipment,
-                description: equipment.description,
-                model: equipment.model,
-                category: equipment.category,
-                equipment: equipment.checklist,
-                vistoria: equipment.survey,
-
-
-
-
-            }
-        })
-
+        const equipments = await Equipment.find({ relations: ['survey', 'checklist', 'survey.item_survey', 'survey.user', 'checklist.item_checklist'] })
         return res.status(200).json(equipments);
     }
 
