@@ -21,7 +21,7 @@ export default class ChecklistController {
         const equipment = await Equipment.findOne({ where: { id_equipment } });
 
         if (!equipment) {
-            return res.status(404).json({ error: 'Equipamento não encontrado favor cadastrar' });
+            return res.status(404).json({ error: 'Equipamento não encontrado favor cadastrar antes de adicionar checklist!' });
         }
         const checklist = new Checklist()
         checklist.description = description

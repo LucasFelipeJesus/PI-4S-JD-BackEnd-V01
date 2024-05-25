@@ -54,7 +54,7 @@ export default class EquipmentsController {
         if (!id || isNaN(Number(id))) {
             return res.status(400).json({ message: 'ID é obrigatório' });
         }
-        const equipment = await Equipment.findOne({ where: { id_equipment: id }, relations: ['checklist'] });
+        const equipment = await Equipment.findOne({ where: { id_equipment: Number(id) }, relations: ['survey', 'checklist', 'survey.item_survey', 'survey.user', 'checklist.item_checklist'] })
 
         if (!equipment) {
             return res.status(404).json({ erro: 'Equipamento não encontrado' });

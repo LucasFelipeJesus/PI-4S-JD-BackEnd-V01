@@ -20,6 +20,8 @@ class EvidenceController {
         if (!survey) {
             return res.status(404).json({ error: 'Vistoria não encontrada favor cadastrar' });
         }
+
+
         if (req.file) {
             return res.json({ response: req.file });
         }

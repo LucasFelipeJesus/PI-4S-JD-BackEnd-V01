@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import User from '../../models/user.entity';
 import bycrypt from 'bcrypt';
 import Token from '../../models/token.entity';
-import ItemSurvey from '../../models/item_survey.entity';
+import Survey from '../../models/survey.entity';
+
 
 export default class AuthenticationController {
     static async store(req: Request, res: Response) {
@@ -151,13 +152,19 @@ export default class AuthenticationController {
             return res.status(400).json({ error: 'O id é obrigatório!' });
         }
 
-        const user = await User.findOneBy({ iduser: Number(id) });
+        const user = await User.findOne({ where: { iduser: Number(id) }, relations: ['survey'] });
 
         if (!user) {
             return res.status(404).json({ error: 'Não encontrado' });
         }
-        user.remove()
-        return res.status(204).json()
+
+        if (user.survey) {
+            return res.status(400).json({ error: 'Usuário não pode ser removido, pois está vinculado a uma vistoria' });
+        }
+
+
+        await User.remove(user)
+        return res.status(204).json({ message: 'Usuário removido com sucesso' })
     }
 
     static async update(req: Request, res: Response) {

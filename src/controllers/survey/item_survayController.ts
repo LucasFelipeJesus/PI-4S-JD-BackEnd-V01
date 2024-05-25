@@ -18,7 +18,7 @@ export default class ItemSurveyController {
         const survey = await Survey.findOne({ where: { id_survey } });
 
         if (!survey) {
-            return res.status(404).json({ error: 'Vistoria não encontrada favor cadastrar antes de adiocionar itens!' });
+            return res.status(404).json({ error: 'Vistoria não encontrada favor cadastrar antes de adicionar itens!' });
         }
         const item_survey = new ItemSurvey()
         item_survey.observation = observation
