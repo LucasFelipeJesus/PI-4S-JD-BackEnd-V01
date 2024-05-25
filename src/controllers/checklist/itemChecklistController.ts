@@ -12,7 +12,7 @@ export default class itemChecklistController {
         }
 
         if (!description || !id_checklist) {
-            return res.status(400).json({ message: 'Campos obrigatórios' });
+            return res.status(400).json({ message: 'Descrição e id do clecklist: Campo obrigatórios' });
         }
 
         const item_check = new Item_check()
@@ -70,15 +70,15 @@ export default class itemChecklistController {
     }
     static async update(req: Request, res: Response) {
         const { id } = req.params
-        const { description } = req.body
+        const { description, id_checklist } = req.body
         const { authorization } = req.headers;
 
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
-        if (!description) {
-            return res.status(400).json({ message: ' Descrição: Campo obrigatórios' });
+        if (!description || !id_checklist) {
+            return res.status(400).json({ message: ' Descrição e id do clecklist: Campo obrigatórios' });
         }
 
         if (!id || isNaN(Number(id))) {

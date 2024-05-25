@@ -12,7 +12,7 @@ export default class EquipmentsController {
         }
 
         if (!description || !model || !category) {
-            return res.status(400).json({ message: 'Campos (descrição, modelo, categoria e id do checklist ) obrigatórios' });
+            return res.status(400).json({ message: 'Campos (descrição, modelo, categoria ) são obrigatórios' });
         }
 
         const equipment = new Equipment()
@@ -101,7 +101,7 @@ export default class EquipmentsController {
         }
 
         if (!description || !model || !category) {
-            return res.status(400).json({ message: 'Campos obrigatórios' });
+            return res.status(400).json({ message: 'Campos (descrição, modelo, categoria ) são obrigatórios' });
         }
 
         if (!id || isNaN(Number(id))) {

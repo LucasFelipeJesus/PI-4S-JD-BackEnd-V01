@@ -14,7 +14,7 @@ export default class ChecklistController {
         }
 
         if (!description || !id_equipment) {
-            return res.status(400).json({ message: 'Campos (descrição e id do item do checklist) obrigatórios' });
+            return res.status(400).json({ message: 'Campos (descrição e id do equipamento) são obrigatórios' });
         }
         const checklist = new Checklist()
         checklist.description = description

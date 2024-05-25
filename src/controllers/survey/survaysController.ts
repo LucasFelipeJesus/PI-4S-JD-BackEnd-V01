@@ -12,7 +12,7 @@ export default class SurveysController {
         }
 
         if (!description || !date_start || !id_equipment) {
-            return res.status(400).json({ message: 'Campos (descrição e id do item do checklist) obrigatórios' });
+            return res.status(400).json({ message: 'Campos (descrição data de inicio e id do equipamento) são obrigatórios' });
         }
         const survey = new Survey()
         survey.description = description
