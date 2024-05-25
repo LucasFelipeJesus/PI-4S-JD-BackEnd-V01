@@ -29,17 +29,13 @@ export default class AuthenticationController {
     static async login(req: Request, res: Response) {
         const { email, password } = req.body;
 
-
         if (!email || !password) {
             return res.status(400).json({ message: 'Campos (e-mail e senha) são obrigatórios' });
         }
-
         const user = await User.findOneBy({ email });
-
         if (!user) {
             return res.status(404).json({ error: 'Usuário não encontrado' });
         }
-
         const passwordMatch = bycrypt.compareSync(password, user.password);
 
         if (!passwordMatch) {
@@ -60,6 +56,8 @@ export default class AuthenticationController {
 
         token.user = user
         await token.save()
+
+
 
         res.cookie('token', token.token, { httpOnly: true, secure: true, sameSite: 'none' })
         return res.json({
