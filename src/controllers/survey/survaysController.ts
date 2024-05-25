@@ -5,9 +5,9 @@ import { Request, Response } from 'express';
 export default class SurveysController {
     static async store(req: Request, res: Response) {
         const { description, date_start, id_equipment } = req.body;
-        const { id_user } = req.headers;
+        const { authorization } = req.headers;
 
-        if (!id_user) {
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
@@ -17,7 +17,6 @@ export default class SurveysController {
         const survey = new Survey()
         survey.description = description
         survey.date_start = date_start
-        survey.id_user = Number(id_user)
         survey.equipment = id_equipment
 
         await survey.save()
@@ -26,8 +25,8 @@ export default class SurveysController {
     }
 
     static async index(req: Request, res: Response) {
-        const { id_user } = req.headers;
-        if (!id_user) {
+        const { authorization } = req.headers;
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
         const surveys = await Survey.find({ relations: ['item_survey'] });
@@ -36,9 +35,9 @@ export default class SurveysController {
 
     static async show(req: Request, res: Response) {
         const { id } = req.params;
-        const { id_user } = req.headers;
+        const { authorization } = req.headers;
 
-        if (!id_user) {
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
@@ -57,9 +56,9 @@ export default class SurveysController {
     static async delete(req: Request, res: Response) {
 
         const { id } = req.params // const id = req.params.id 
-        const { id_user } = req.headers;
+        const { authorization } = req.headers;
 
-        if (!id_user) {
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
@@ -83,9 +82,9 @@ export default class SurveysController {
     static async update(req: Request, res: Response) {
         const { id } = req.params
         const { description, date_start, date_end, id_equipment } = req.body
-        const { id_user } = req.headers
+        const { authorization } = req.headers
 
-        if (!id_user) {
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' })
         }
 
@@ -107,7 +106,7 @@ export default class SurveysController {
         survey.date_start = date_start
         survey.date_end = date_end
         survey.equipment = id_equipment
-        survey.id_user = Number(id_user)
+
 
         await survey.save()
         return res.status(200).json(survey)

@@ -6,8 +6,9 @@ import cookieParser from 'cookie-parser'
 
 const app = express()
 const port = process.env.PORT || 3000
-app.use(cookieParser())
+
 app.use(express.json())
+app.use(cookieParser())
 app.use(cors({
     origin: '*', // libera para todos os domínios
     //origin: ['http://localhost:3000', 'https://meuapp.com'], // libera para os domínios informados

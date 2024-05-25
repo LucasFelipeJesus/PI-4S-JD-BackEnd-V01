@@ -15,8 +15,7 @@ export default class Token extends BaseEntity {
     @Column()
     expire_date!: Date;
 
-    @Column()
-    id_user!: number;
+
 
     @ManyToOne(() => User, user => user.token)
     user!: User;

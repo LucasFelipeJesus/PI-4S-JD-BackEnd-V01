@@ -7,9 +7,9 @@ import { Request, Response } from "express";
 export default class ChecklistController {
     static async create(req: any, res: any) {
         const { description, id_equipment } = req.body;
-        const { id_user } = req.headers;
+        const { authorization } = req.headers;
 
-        if (!id_user) {
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
@@ -26,8 +26,8 @@ export default class ChecklistController {
     }
 
     static async index(req: Request, res: Response) {
-        const { id_user } = req.headers;
-        if (!id_user) {
+        const { authorization } = req.headers;
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
         const checklists = await Checklist.find({ relations: ['item_checklist'] });
@@ -36,9 +36,9 @@ export default class ChecklistController {
 
     static async show(req: Request, res: Response) {
         const { id } = req.params;
-        const { id_user } = req.headers;
+        const { authorization } = req.headers;
 
-        if (!id_user) {
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
@@ -77,9 +77,9 @@ export default class ChecklistController {
 
     static async delete(req: Request, res: Response) {
         const { id } = req.params; // const id = req.params.id  
-        const { id_user } = req.headers;
+        const { authorization } = req.headers;
 
-        if (!id_user) {
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
@@ -127,9 +127,9 @@ export default class ChecklistController {
     static async update(req: Request, res: Response) {
         const { id } = req.params;
         const { description, id_item_checklist } = req.body;
-        const { id_user } = req.headers;
+        const { authorization } = req.headers;
 
-        if (!id_user) {
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 

@@ -5,9 +5,9 @@ import ItemSurvey from '../../models/item_survey.entity';
 export default class ItemSurveyController {
     static async store(req: Request, res: Response) {
         const { observation, status, id_survey } = req.body;
-        const { id_user } = req.headers;
+        const { authorization } = req.headers;
 
-        if (!id_user) {
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
@@ -17,7 +17,6 @@ export default class ItemSurveyController {
         const item_survey = new ItemSurvey()
         item_survey.observation = observation
         item_survey.status = status
-        item_survey.id_user = Number(id_user)
         item_survey.survey = id_survey
 
         await item_survey.save()
@@ -26,8 +25,8 @@ export default class ItemSurveyController {
     }
 
     static async index(req: Request, res: Response) {
-        const { id_user } = req.headers;
-        if (!id_user) {
+        const { authorization } = req.headers;
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
         const item_surveys = await ItemSurvey.find({ relations: ['evidence'] });
@@ -36,9 +35,9 @@ export default class ItemSurveyController {
 
     static async show(req: Request, res: Response) {
         const { id } = req.params;
-        const { id_user } = req.headers;
+        const { authorization } = req.headers;
 
-        if (!id_user) {
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
@@ -56,9 +55,9 @@ export default class ItemSurveyController {
     static async delete(req: Request, res: Response) {
 
         const { id } = req.params // const id = req.params.id 
-        const { id_user } = req.headers;
+        const { authorization } = req.headers;
 
-        if (!id_user) {
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
@@ -77,9 +76,9 @@ export default class ItemSurveyController {
     static async update(req: Request, res: Response) {
         const { id } = req.params;
         const { observation, status } = req.body;
-        const { id_user } = req.headers;
+        const { authorization } = req.headers;
 
-        if (!id_user) {
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 

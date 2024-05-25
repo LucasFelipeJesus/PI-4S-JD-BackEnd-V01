@@ -5,11 +5,12 @@ import Equipment from '../../models/equipments.entity';
 export default class EquipmentsController {
     static async store(req: Request, res: Response) {
         const { description, model, category } = req.body;
-        const { id_user } = req.headers;
+        const { authorization } = req.headers;
 
-        if (!id_user) {
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
+
         if (!description || !model || !category) {
             return res.status(400).json({ message: 'Campos (descrição, modelo, categoria e id do checklist ) obrigatórios' });
         }
@@ -18,16 +19,14 @@ export default class EquipmentsController {
         equipment.description = description
         equipment.model = model
         equipment.category = category
-        equipment.id_user = Number(id_user)
-
 
         await equipment.save()
         return res.status(201).json(equipment);
     }
 
     static async index(req: Request, res: Response) {
-        const { id_user } = req.headers;
-        if (!id_user) {
+        const { authorization } = req.headers;
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
         const equipments = await Equipment.find({ relations: ['checklist'] })
@@ -36,8 +35,8 @@ export default class EquipmentsController {
 
     static async show(req: any, res: any) {
         const { id } = req.params;
-        const { id_user } = req.headers;
-        if (!id_user) {
+        const { authorization } = req.headers;
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
@@ -68,9 +67,9 @@ export default class EquipmentsController {
 
     static async delete(req: Request, res: Response) {
         const { id } = req.params;
-        const { id_user } = req.headers;
+        const { authorization } = req.headers;
 
-        if (!id_user) {
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
@@ -95,9 +94,9 @@ export default class EquipmentsController {
     static async update(req: Request, res: Response) {
         const { id } = req.params
         const { description, model, category } = req.body
-        const { id_user } = req.headers
+        const { authorization } = req.headers
 
-        if (!id_user) {
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 

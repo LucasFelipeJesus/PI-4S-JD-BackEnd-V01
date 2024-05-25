@@ -20,7 +20,7 @@ export default class AuthenticationController {
         user.password = bycrypt.hashSync(password, 10)
         await user.save()
         return res.status(201).json({
-            id: user.id_user,
+            id: user.iduser,
             name: user.name,
             email: user.email
         });
@@ -28,6 +28,7 @@ export default class AuthenticationController {
 
     static async login(req: Request, res: Response) {
         const { email, password } = req.body;
+
 
         if (!email || !password) {
             return res.status(400).json({ message: 'Campos (e-mail e senha) são obrigatórios' });
@@ -47,7 +48,7 @@ export default class AuthenticationController {
 
         await Token.delete(
             {
-                user: { id_user: user.id_user }
+                user: { iduser: user.iduser }
             }
         )
 
@@ -117,21 +118,21 @@ export default class AuthenticationController {
         if (!id) {
             return res.status(400).json({ error: 'Usuário não autenticado!' });
         }
-        const users = await User.find({ where: { id_user: Number(id) } })
+        const users = await User.find({ where: { iduser: Number(id) } })
         return res.status(200).json(users);
     }
 
     static async show(req: Request, res: Response) {
         const { id } = req.params;
-        const { id_user } = req.headers;
-        if (!id_user) {
+        const { authorization } = req.headers;
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado!' });
         }
 
         if (!id || isNaN(Number(id))) {
             return res.status(400).json({ message: 'ID é obrigatório' });
         }
-        const user = await User.findOneBy({ id_user: Number(id) });
+        const user = await User.findOneBy({ iduser: Number(id) });
         if (!user) {
             return res.status(404).json({ erro: 'Usuário não encontrado' });
         }
@@ -140,8 +141,8 @@ export default class AuthenticationController {
 
     static async delete(req: Request, res: Response) {
         const { id } = req.params;
-        const { id_user } = req.headers;
-        if (!id_user) {
+        const { authorization } = req.headers;
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado!' });
         }
 
@@ -149,7 +150,7 @@ export default class AuthenticationController {
             return res.status(400).json({ error: 'O id é obrigatório!' });
         }
 
-        const user = await User.findOneBy({ id_user: Number(id) });
+        const user = await User.findOneBy({ iduser: Number(id) });
 
         if (!user) {
             return res.status(404).json({ error: 'Não encontrado' });
@@ -161,8 +162,8 @@ export default class AuthenticationController {
     static async update(req: Request, res: Response) {
         const { id } = req.params
         const { name, email, password } = req.body
-        const { id_user } = req.headers;
-        if (!id_user) {
+        const { authorization } = req.headers;
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado!' });
         }
         if (!name || !email || !password) {
@@ -172,7 +173,7 @@ export default class AuthenticationController {
         if (!id || isNaN(Number(id))) {
             return res.status(400).json({ error: 'O id é obrigatório!' });
         }
-        const user = await User.findOneBy({ id_user: Number(id) });
+        const user = await User.findOneBy({ iduser: Number(id) });
 
         if (!user) {
             return res.status(404).json({ error: 'Não encontrado' });

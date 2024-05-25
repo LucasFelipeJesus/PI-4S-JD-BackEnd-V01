@@ -7,7 +7,7 @@ import Survey from "./survey.entity";
 export default class User extends BaseEntity {
 
     @PrimaryGeneratedColumn()
-    id_user!: number;
+    iduser!: number;
 
     @Column()
     name!: string;

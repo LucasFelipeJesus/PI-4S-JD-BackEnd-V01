@@ -9,7 +9,5 @@ itemSurveyRoutes.get('/:id', ItemSurveyController.show)
 itemSurveyRoutes.delete('/:id', ItemSurveyController.delete)
 itemSurveyRoutes.put('/:id', ItemSurveyController.update)
 
-
-
 export default itemSurveyRoutes;
 

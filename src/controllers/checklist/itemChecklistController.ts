@@ -5,9 +5,9 @@ import Item_Checklist from "../../models/item_checklist.entity";
 export default class itemChecklistController {
     static async create(req: Request, res: Response) {
         const { description, id_checklist } = req.body;
-        const { id_user } = req.headers;
+        const { authorization } = req.headers;
 
-        if (!id_user) {
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
@@ -24,8 +24,8 @@ export default class itemChecklistController {
     }
 
     static async index(req: Request, res: Response) {
-        const { id_user } = req.headers;
-        if (!id_user) {
+        const { authorization } = req.headers;
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
         const itens_check = await Item_Checklist.find()
@@ -34,9 +34,9 @@ export default class itemChecklistController {
 
     static async show(req: Request, res: Response) {
         const { id_item_checklist } = req.params;
-        const { id_user } = req.headers;
+        const { authorization } = req.headers;
 
-        if (!id_user) {
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
@@ -51,9 +51,9 @@ export default class itemChecklistController {
 
     static async delete(req: Request, res: Response) {
         const { id } = req.params // const id = req.params.id  
-        const { id_user } = req.headers;
+        const { authorization } = req.headers;
 
-        if (!id_user) {
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
         if (!id || isNaN(Number(id))) {
@@ -71,9 +71,9 @@ export default class itemChecklistController {
     static async update(req: Request, res: Response) {
         const { id } = req.params
         const { description } = req.body
-        const { id_user } = req.headers;
+        const { authorization } = req.headers;
 
-        if (!id_user) {
+        if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 

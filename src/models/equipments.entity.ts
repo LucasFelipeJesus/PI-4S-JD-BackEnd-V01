@@ -16,9 +16,6 @@ export default class Equipment extends BaseEntity {
     @Column()
     category!: string;
 
-    @Column()
-    id_user!: number;
-
     @OneToMany(() => Checklist, checklist => checklist.equipment)
     checklist!: Checklist[];
 

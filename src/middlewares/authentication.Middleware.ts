@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import Token from "../models/token.entity";
+import User from "../models/user.entity";
 
 export default async function authenticationMiddleware(req: Request, res: Response, next: NextFunction) {
 
@@ -16,6 +17,8 @@ export default async function authenticationMiddleware(req: Request, res: Respon
         await userToken.remove();
         return res.status(401).json({ error: 'Token expirado' });
     }
-    req.headers.id_user = userToken.user.id_user.toString();
+
+    req.headers.iduser = userToken.user.iduser.toString();
+
     next();
 }
