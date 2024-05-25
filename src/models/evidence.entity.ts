@@ -19,7 +19,7 @@ export default class Evidence extends BaseEntity {
 
     @ManyToOne(() => ItemSurvey, ItemSurvey => ItemSurvey.evidence)
     item_survey!: ItemSurvey;
-    image: any;
+
 
 
 }

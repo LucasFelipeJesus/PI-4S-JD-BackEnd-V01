@@ -1,14 +1,15 @@
 import { Router } from "express";
-import EvidenceController from "../../controllers/evidence/evidenceController";
-import multer from 'multer';
+import multer from "multer";
+import { uploadAvatar } from "../../middlewares/upload/avatar";
+import { evidenceController } from "../../controllers/evidence/evidenceController";
+
+
+
 
 const evidenceRoutes = Router();
 
-evidenceRoutes.post('/', EvidenceController.store);
-evidenceRoutes.get('/', EvidenceController.index);
-evidenceRoutes.get('/:id', EvidenceController.show);
-evidenceRoutes.delete('/:id', EvidenceController.delete);
-evidenceRoutes.put('/:id', EvidenceController.update);
+evidenceRoutes.post('/', multer(uploadAvatar.getconfig).single('avatar'), evidenceController.store);
+
 
 
 
