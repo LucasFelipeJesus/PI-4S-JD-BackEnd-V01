@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import ItemSurvey from '../../models/item_survey.entity';
+import Survey from '../../models/survey.entity';
 
 
 export default class ItemSurveyController {
@@ -13,6 +14,11 @@ export default class ItemSurveyController {
 
         if (!observation || !status || !id_survey) {
             return res.status(400).json({ message: 'Campos (observação, status e id da vistoria) obrigatórios' });
+        }
+        const survey = await Survey.findOne({ where: { id_survey } });
+
+        if (!survey) {
+            return res.status(404).json({ error: 'Vistoria não encontrada favor cadastrar antes de adiocionar itens!' });
         }
         const item_survey = new ItemSurvey()
         item_survey.observation = observation

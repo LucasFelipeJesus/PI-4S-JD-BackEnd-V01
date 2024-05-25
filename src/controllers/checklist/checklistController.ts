@@ -1,4 +1,5 @@
 import Checklist from "../../models/checklist.entity";
+import Equipment from "../../models/equipments.entity";
 import Item_Checklist from "../../models/item_checklist.entity";
 import { Request, Response } from "express";
 
@@ -16,11 +17,15 @@ export default class ChecklistController {
         if (!description || !id_equipment) {
             return res.status(400).json({ message: 'Campos (descrição e id do equipamento) são obrigatórios' });
         }
+
+        const equipment = await Equipment.findOne({ where: { id_equipment } });
+
+        if (!equipment) {
+            return res.status(404).json({ error: 'Equipamento não encontrado favor cadastrar' });
+        }
         const checklist = new Checklist()
         checklist.description = description
         checklist.equipment = id_equipment
-
-
         await checklist.save()
         return res.status(201).json(checklist);
     }

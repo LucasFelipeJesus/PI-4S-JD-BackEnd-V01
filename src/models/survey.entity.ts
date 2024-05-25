@@ -13,11 +13,10 @@ export default class Survey extends BaseEntity {
     description!: string;
 
     @Column()
-    date_start!: Date;
+    date_start!: string;
 
     @Column()
-    date_end?: Date;
-
+    date_end!: string;
 
     @OneToMany(() => User, user => user.survey)
     user?: User[];

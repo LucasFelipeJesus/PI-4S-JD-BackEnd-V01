@@ -1,27 +1,31 @@
+import Checklist from "../../models/checklist.entity";
+import Equipment from "../../models/equipments.entity";
+import Item_Checklist from "../../models/item_checklist.entity";
+import ItemSurvey from "../../models/item_survey.entity";
 import Survey from "../../models/survey.entity";
 import { Request, Response } from 'express';
 
 
 export default class SurveysController {
     static async store(req: Request, res: Response) {
-        const { description, date_start, id_equipment } = req.body;
+        const { description, date_start, date_end } = req.body;
         const { authorization } = req.headers;
 
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
-        if (!description || !date_start || !id_equipment) {
-            return res.status(400).json({ message: 'Campos (descrição data de inicio e id do equipamento) são obrigatórios' });
+        if (!description || !date_start! || !date_end!) {
+            return res.status(400).json({ message: 'Campos (descrição data de inicio e fim  ) são obrigatórios' });
         }
         const survey = new Survey()
         survey.description = description
         survey.date_start = date_start
-        survey.equipment = id_equipment
+        survey.date_end = date_end
+
 
         await survey.save()
         return res.status(201).json(survey);
-
     }
 
     static async index(req: Request, res: Response) {
@@ -29,8 +33,20 @@ export default class SurveysController {
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
-        const surveys = await Survey.find({ relations: ['item_survey'] });
-        return res.status(200).json(surveys);
+        const surveys = await Survey.find({ relations: ['item_survey'] && ['equipment'] && ['equipment.checklist'] && ['equipment.checklist.item_checklist'] });
+        const surveysFiltered = surveys.map(survey => {
+            return {
+                id_survey: survey.id_survey,
+                description: survey.description,
+                date_start: survey.date_start,
+                date_end: survey.date_end,
+                survey: survey.item_survey,
+                equipment: survey.equipment,
+
+
+            }
+        })
+        return res.status(200).json(surveysFiltered);
     }
 
     static async show(req: Request, res: Response) {
@@ -44,12 +60,24 @@ export default class SurveysController {
         if (!id || isNaN(Number(id))) {
             return res.status(400).json({ message: 'ID é obrigatório' });
         }
-        const survey = await Survey.findOne({ where: { id_survey: Number(id) }, relations: ['item_survey'] })
+        const surveys = await Survey.find({ where: { id_survey: Number(id) }, relations: ['item_survey'] && ['equipment'] && ['equipment.checklist'] && ['equipment.checklist.item_checklist'] });
+        //const survey = await Survey.findOne({ where: { id_survey: Number(id) }, relations: ['item_survey'] })
+        const surveysFiltered = surveys.map(survey => {
+            return {
+                id_survey: survey.id_survey,
+                description: survey.description,
+                date_start: survey.date_start,
+                date_end: survey.date_end,
+                survey: survey.item_survey,
+                equipment: survey.equipment,
 
-        if (!survey) {
+
+            }
+        })
+        if (!surveysFiltered) {
             return res.status(404).json({ erro: 'Vistoria não encontrada' });
         }
-        return res.json(survey);
+        return res.json(surveysFiltered);
     }
 
 
@@ -81,7 +109,7 @@ export default class SurveysController {
 
     static async update(req: Request, res: Response) {
         const { id } = req.params
-        const { description, date_start, date_end, id_equipment } = req.body
+        const { description, date_start, date_end } = req.body
         const { authorization } = req.headers
 
         if (!authorization) {
@@ -105,7 +133,7 @@ export default class SurveysController {
         survey.description = description
         survey.date_start = date_start
         survey.date_end = date_end
-        survey.equipment = id_equipment
+
 
 
         await survey.save()

@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
+import Survey from "../../models/survey.entity";
 
 class EvidenceController {
 
-    public store(req: Request, res: Response) {
+    public async store(req: Request, res: Response) {
         const { observation, status, id_survey } = req.body;
         const { authorization } = req.headers;
 
@@ -12,6 +13,12 @@ class EvidenceController {
 
         if (!observation || !status || !id_survey) {
             return res.status(400).json({ message: 'Campos (observação , status e id da vistoria) obrigatórios' });
+        }
+
+        const survey = await Survey.findOne({ where: { id_survey } });
+
+        if (!survey) {
+            return res.status(404).json({ error: 'Vistoria não encontrada favor cadastrar' });
         }
         if (req.file) {
             return res.json({ response: req.file });

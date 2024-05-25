@@ -56,9 +56,6 @@ export default class AuthenticationController {
 
         token.user = user
         await token.save()
-
-
-
         res.cookie('token', token.token, { httpOnly: true, secure: true, sameSite: 'none' })
         return res.json({
             token: token.token,

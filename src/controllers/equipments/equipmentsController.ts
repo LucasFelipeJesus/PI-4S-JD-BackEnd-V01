@@ -1,24 +1,33 @@
 import e, { Request, Response } from 'express';
 import Equipment from '../../models/equipments.entity';
+import { getRepository } from 'typeorm';
+import Survey from '../../models/survey.entity';
 
 
 export default class EquipmentsController {
     static async store(req: Request, res: Response) {
-        const { description, model, category } = req.body;
+        const { description, model, category, id_survey } = req.body
         const { authorization } = req.headers;
 
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
-        if (!description || !model || !category) {
-            return res.status(400).json({ message: 'Campos (descrição, modelo, categoria ) são obrigatórios' });
+        if (!description || !model || !category || !id_survey) {
+            return res.status(400).json({ message: 'Campos (descrição, modelo, categoria e id da vistoria ) são obrigatórios' });
+        }
+
+        const survey = await Survey.findOne({ where: { id_survey } });
+
+        if (!survey) {
+            return res.status(404).json({ error: 'Vistoria não encontrada favor cadastrar' });
         }
 
         const equipment = new Equipment()
         equipment.description = description
         equipment.model = model
         equipment.category = category
+        equipment.survey = id_survey
 
         await equipment.save()
         return res.status(201).json(equipment);
@@ -29,6 +38,7 @@ export default class EquipmentsController {
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
+
         const equipments = await Equipment.find({ relations: ['checklist'] })
         return res.status(200).json(equipments);
     }
@@ -93,15 +103,15 @@ export default class EquipmentsController {
 
     static async update(req: Request, res: Response) {
         const { id } = req.params
-        const { description, model, category } = req.body
+        const { description, model, category, id_survey } = req.body
         const { authorization } = req.headers
 
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
-        if (!description || !model || !category) {
-            return res.status(400).json({ message: 'Campos (descrição, modelo, categoria ) são obrigatórios' });
+        if (!description || !model || !category || !id_survey) {
+            return res.status(400).json({ message: 'Campos (descrição, modelo, categoria e id da vistoria ) são obrigatórios' });
         }
 
         if (!id || isNaN(Number(id))) {
@@ -117,6 +127,7 @@ export default class EquipmentsController {
         equipment.description = description
         equipment.model = model
         equipment.category = category
+        equipment.survey = id_survey
 
         await equipment.save()
         return res.status(204).json()

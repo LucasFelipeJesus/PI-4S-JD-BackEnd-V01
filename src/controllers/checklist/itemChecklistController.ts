@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Item_check from "../../models/item_checklist.entity";
 import Item_Checklist from "../../models/item_checklist.entity";
+import Checklist from "../../models/checklist.entity";
 
 export default class itemChecklistController {
     static async create(req: Request, res: Response) {
@@ -13,6 +14,11 @@ export default class itemChecklistController {
 
         if (!description || !id_checklist) {
             return res.status(400).json({ message: 'Descrição e id do clecklist: Campo obrigatórios' });
+        }
+        const itemchecklist = await Checklist.findOne({ where: { id_checklist } });
+
+        if (!itemchecklist) {
+            return res.status(404).json({ error: 'Checklist não encontrado favor cadastrar' });
         }
 
         const item_check = new Item_check()
