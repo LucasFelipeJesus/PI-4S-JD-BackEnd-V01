@@ -1,37 +1,24 @@
 import { Request, Response } from 'express';
 import ItemSurvey from '../../models/item_survey.entity';
-import Survey from '../../models/survey.entity';
+import Evidence from '../../models/evidence.entity';
 
 
 export default class ItemSurveyController {
     static async store(req: Request, res: Response) {
-        const { observation, status, id_survey } = req.body;
+        const { description, status, evidence } = req.body;
         const { authorization } = req.headers;
 
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
-
-        if (!observation) {
-            return res.status(400).json({ message: 'Campos (observação) obrigatório' });
+        if (!description || !status) {
+            return res.status(400).json({ message: 'Campos (descrição e status) são obrigatórios' });
         }
 
-        if (!status) {
-            return res.status(400).json({ message: 'Campos (status) obrigatório' });
-        }
-
-        if (!id_survey || isNaN(Number(id_survey))) {
-            return res.status(400).json({ message: 'ID da vistoria é obrigatório' });
-        }
-        const survey = await Survey.findOne({ where: { id_survey } });
-
-        if (!survey) {
-            return res.status(404).json({ error: 'Vistoria não encontrada favor cadastrar antes de adicionar itens!' });
-        }
         const item_survey = new ItemSurvey()
-        item_survey.observation = observation
+        item_survey.description = description
         item_survey.status = status
-        item_survey.survey = id_survey
+        item_survey.evidence = evidence
 
         await item_survey.save()
         return res.status(201).json(item_survey);
@@ -89,7 +76,7 @@ export default class ItemSurveyController {
 
     static async update(req: Request, res: Response) {
         const { id } = req.params;
-        const { observation, status } = req.body;
+        const { description, status, evidence } = req.body;
         const { authorization } = req.headers;
 
         if (!authorization) {
@@ -100,17 +87,20 @@ export default class ItemSurveyController {
             return res.status(400).json({ message: 'ID é obrigatório' });
         }
 
-        if (!observation || !status) {
+        if (!description) {
             return res.status(400).json({ message: 'Campos (observação e status) obrigatórios' });
         }
-        const item_survey = await ItemSurvey.findOne({ where: { id_item_survey: Number(id) } })
+
+        const item_survey = await ItemSurvey.findOne({ where: { id_item_survey: Number(id) } });
 
         if (!item_survey) {
-            return res.status(404).json({ erro: 'Item da vistoria não encontrado' });
+            return res.status(404).json({ error: 'Item da vistoria não encontrado' });
         }
 
-        item_survey.observation = observation
+
+        item_survey.description = description
         item_survey.status = status
+        item_survey.evidence = evidence
 
         await item_survey.save()
         return res.status(200).json(item_survey);

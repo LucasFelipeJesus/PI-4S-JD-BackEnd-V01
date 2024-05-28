@@ -18,13 +18,13 @@ export default class Survey extends BaseEntity {
     @Column()
     date_end!: string;
 
-    @OneToMany(() => User, user => user.survey)
+    @ManyToOne(() => User, user => user.survey)
     user?: User[];
 
-    @OneToMany(() => Equipment, equipment => equipment.survey)
+    @ManyToOne(() => Equipment, equipment => equipment.survey)
     equipment?: Equipment[];
 
-    @OneToMany(() => ItemSurvey, item_survey => item_survey.survey)
+    @ManyToOne(() => ItemSurvey, item_survey => item_survey.survey)
     item_survey?: ItemSurvey[];
 
 

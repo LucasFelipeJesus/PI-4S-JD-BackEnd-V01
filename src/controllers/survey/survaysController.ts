@@ -5,21 +5,23 @@ import { Request, Response } from 'express';
 
 export default class SurveysController {
     static async store(req: Request, res: Response) {
-        const { description, date_start, date_end, iduser } = req.body;
+        const { description, equipment, date_start, date_end, user, item_survey } = req.body;
         const { authorization } = req.headers;
 
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
-        if (!description || !date_start! || !date_end! || !iduser!) {
-            return res.status(400).json({ message: 'Campos (descrição data de inicio e fim  e usuário ) são obrigatórios' });
+        if (!description || !date_start!) {
+            return res.status(400).json({ message: 'Campos (descrição, data de inicio e término) são obrigatórios' });
         }
         const survey = new Survey()
         survey.description = description
         survey.date_start = date_start
         survey.date_end = date_end
-        survey.user = iduser
+        survey.user = user
+        survey.equipment = equipment
+        survey.item_survey = item_survey
 
 
         await survey.save()
@@ -31,7 +33,7 @@ export default class SurveysController {
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
-        const surveys = await Survey.find({ relations: ['item_survey', 'equipment', 'equipment.checklist', 'equipment.checklist.item_checklist'] });
+        const surveys = await Survey.find({ relations: ['item_survey', 'user', 'equipment', 'equipment.checklist', 'equipment.checklist.item_checklist'] });
         return res.status(200).json(surveys);
     }
 
@@ -46,7 +48,7 @@ export default class SurveysController {
         if (!id || isNaN(Number(id))) {
             return res.status(400).json({ message: 'ID é obrigatório' });
         }
-        const surveys = await Survey.find({ where: { id_survey: Number(id) }, relations: ['item_survey', 'equipment', 'equipment.checklist', 'equipment.checklist.item_checklist'] });
+        const surveys = await Survey.find({ where: { id_survey: Number(id) }, relations: ['item_survey'] });
         //const survey = await Survey.findOne({ where: { id_survey: Number(id) }, relations: ['item_survey'] })
 
         if (!surveys) {
@@ -75,7 +77,9 @@ export default class SurveysController {
         }
 
         if (survey.item_survey && survey.item_survey.length > 0) {
-            return res.status(400).json({ erro: 'Não é possível excluir uma vistoria com itens de vistoria' })
+            await survey.item_survey.forEach(async item => {
+                await item.remove()
+            })
         }
 
         await Survey.remove(survey)
@@ -84,15 +88,14 @@ export default class SurveysController {
 
     static async update(req: Request, res: Response) {
         const { id } = req.params
-        const { description, date_start, date_end } = req.body
+        const { description, equipment, date_start, date_end, user, item_survey } = req.body;
         const { authorization } = req.headers
 
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' })
         }
-
-        if (!description || !date_start || !date_end) {
-            return res.status(400).json({ message: 'Campos (descrição , data de inicio e término) são obrigatórios' })
+        if (!description || !date_start) {
+            return res.status(400).json({ message: 'Campos (descrição, data de inicio e término) são obrigatórios' })
         }
 
         if (!id || isNaN(Number(id))) {
@@ -108,14 +111,12 @@ export default class SurveysController {
         survey.description = description
         survey.date_start = date_start
         survey.date_end = date_end
-
-
+        survey.user = user
+        survey.equipment = equipment
+        survey.item_survey = item_survey
 
         await survey.save()
         return res.status(200).json(survey)
-
-
-
     }
 
 

@@ -1,26 +1,31 @@
 import { Request, Response } from "express";
-import Survey from "../../models/survey.entity";
+import ItemSurvey from "../../models/item_survey.entity";
+import Evidence from "../../models/evidence.entity";
 
 class EvidenceController {
 
     public async store(req: Request, res: Response) {
-        const { observation, status, id_survey } = req.body;
+        const { description, item_survey } = req.body;
+
         const { authorization } = req.headers;
 
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
-        if (!observation || !status || !id_survey) {
+        if (!description) {
             return res.status(400).json({ message: 'Campos (observação , status e id da vistoria) obrigatórios' });
         }
 
-        const survey = await Survey.findOne({ where: { id_survey } });
+        const survey = await ItemSurvey.findOne({ where: { id_item_survey: item_survey } });
 
         if (!survey) {
             return res.status(404).json({ error: 'Vistoria não encontrada favor cadastrar' });
         }
 
+        const evidence = new Evidence()
+        evidence.description = description
+        evidence.item_survey = item_survey
 
         if (req.file) {
             return res.json({ response: req.file });
@@ -29,10 +34,7 @@ class EvidenceController {
 
         return res.json({
             response: 'Arquivo não suportado!',
-
         });
-
-
     }
 
     public show(req: Request, res: Response) {

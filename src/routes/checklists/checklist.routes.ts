@@ -4,7 +4,7 @@ import authenticationMiddleware from "../../middlewares/authentication.Middlewar
 
 const checklistRoutes = Router();
 
-checklistRoutes.post('/', authenticationMiddleware, ChecklistController.create)
+checklistRoutes.post('/', authenticationMiddleware, ChecklistController.store)
 checklistRoutes.get('/', authenticationMiddleware, ChecklistController.index)
 checklistRoutes.get('/:id', authenticationMiddleware, ChecklistController.show)
 checklistRoutes.delete('/:id', authenticationMiddleware, ChecklistController.delete)

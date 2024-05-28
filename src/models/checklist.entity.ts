@@ -14,37 +14,9 @@ export default class Checklist extends BaseEntity {
     description!: string;
 
     @OneToMany(() => Item_Checklist, item_checklist => item_checklist.checklist)
-    item_checklist!: Item_Checklist[];
+    item_checklist?: Item_Checklist[];
 
-    @ManyToOne(() => Equipment, equipment => equipment.checklist)
-    equipment!: Equipment;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @OneToMany(() => Equipment, equipment => equipment.checklist)
+    equipment?: Equipment[];
 
 }

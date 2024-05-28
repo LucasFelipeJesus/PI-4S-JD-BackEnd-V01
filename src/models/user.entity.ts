@@ -21,8 +21,8 @@ export default class User extends BaseEntity {
     @OneToMany(() => Token, token => token.user)
     token?: Token[];
 
-    @ManyToOne(() => Survey, survey => survey.user)
-    survey?: Survey;
+    @OneToMany(() => Survey, survey => survey.user)
+    survey?: Survey[];
 
 
 

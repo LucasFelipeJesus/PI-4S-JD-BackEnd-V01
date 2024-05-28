@@ -2,12 +2,12 @@ import { Request, Response } from 'express';
 import User from '../../models/user.entity';
 import bycrypt from 'bcrypt';
 import Token from '../../models/token.entity';
-import Survey from '../../models/survey.entity';
+
 
 
 export default class AuthenticationController {
     static async store(req: Request, res: Response) {
-        const { name, email, password, id_survey } = req.body;
+        const { name, email, password } = req.body;
 
         if (!name || !email || !password) {
             return res.status(400).json({ message: 'Campos (nome email e senha) são obrigatórios' });
@@ -20,7 +20,7 @@ export default class AuthenticationController {
         user.name = name
         user.email = email
         user.password = bycrypt.hashSync(password, 10)
-        user.survey = id_survey
+
         await user.save()
         return res.status(201).json({
             id: user.iduser,
@@ -169,7 +169,7 @@ export default class AuthenticationController {
 
     static async update(req: Request, res: Response) {
         const { id } = req.params
-        const { name, email, password, id_survey } = req.body
+        const { name, email, password } = req.body
         const { authorization } = req.headers;
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado!' });
@@ -189,7 +189,7 @@ export default class AuthenticationController {
         user.name = name
         user.email = email
         user.password = bycrypt.hashSync(password, 10)
-        user.survey = id_survey
+
         await user.save()
         return res.status(204).json()
     }

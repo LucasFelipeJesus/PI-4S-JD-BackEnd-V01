@@ -1,29 +1,26 @@
 import { Request, Response } from "express";
 import Item_check from "../../models/item_checklist.entity";
 import Item_Checklist from "../../models/item_checklist.entity";
-import Checklist from "../../models/checklist.entity";
+
 
 export default class itemChecklistController {
-    static async create(req: Request, res: Response) {
-        const { description, id_checklist } = req.body;
+    static async store(req: Request, res: Response) {
+        const { description, checklist, item_survey } = req.body;
         const { authorization } = req.headers;
 
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
-        if (!description || !id_checklist) {
-            return res.status(400).json({ message: 'Descrição e id do clecklist: Campo obrigatórios' });
+        if (!description) {
+            return res.status(400).json({ message: 'Descrição é obrigatória' });
         }
-        const itemchecklist = await Checklist.findOne({ where: { id_checklist } });
 
-        if (!itemchecklist) {
-            return res.status(404).json({ error: 'Checklist não encontrado favor cadastrar' });
-        }
 
         const item_check = new Item_check()
         item_check.description = description
-        item_check.checklist = id_checklist
+        item_check.checklist = checklist
+        item_check.item_survey = item_survey
 
         await item_check.save()
         return res.status(201).json(item_check);
@@ -34,23 +31,25 @@ export default class itemChecklistController {
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
-        const itens_check = await Item_Checklist.find()
+        const itens_check = await Item_Checklist.find({ relations: ['checklist'] })
         return res.status(200).json(itens_check);
     }
 
     static async show(req: Request, res: Response) {
-        const { id_item_checklist } = req.params;
+        const { id } = req.params;
         const { authorization } = req.headers;
 
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
-        if (!id_item_checklist || isNaN(Number(id_item_checklist))) {
+        if (!id || isNaN(Number(id))) {
             return res.status(400).json({ message: 'ID é obrigatório' });
         }
+        const id_item_checklist = await Item_check.findOneBy({ id_item_checklist: Number(id) })
+
         if (!id_item_checklist) {
-            return res.status(404).json({ erro: 'Equipamento não encontrado' });
+            return res.status(404).json({ erro: 'Não encontrado' });
         }
         return res.json(id_item_checklist);
     }
@@ -65,7 +64,7 @@ export default class itemChecklistController {
         if (!id || isNaN(Number(id))) {
             return res.status(400).json({ error: 'O id é obrigatório!' })
         }
-        const itens_check = await Item_check.findOneBy({ id_item_checklist: Number(id) })
+        const itens_check = await Item_check.findOne({ where: { id_item_checklist: Number(id) }, relations: ['checklist'] })
 
         if (!itens_check) {
             return res.status(404).json({ erro: 'Não encontrado' })
@@ -76,14 +75,14 @@ export default class itemChecklistController {
     }
     static async update(req: Request, res: Response) {
         const { id } = req.params
-        const { description, id_checklist } = req.body
+        const { description, checklist, item_survey } = req.body
         const { authorization } = req.headers;
 
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
-        if (!description || !id_checklist) {
+        if (!description) {
             return res.status(400).json({ message: ' Descrição e id do clecklist: Campo obrigatórios' });
         }
 
@@ -96,6 +95,8 @@ export default class itemChecklistController {
             return res.status(404).json({ erro: 'Não encontrado' })
         }
         itens_check.description = description
+        itens_check.checklist = checklist
+        itens_check.item_survey = item_survey
         await itens_check.save()
         return res.status(204).json()
     }
