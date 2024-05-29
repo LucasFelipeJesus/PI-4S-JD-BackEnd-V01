@@ -5,7 +5,7 @@ import Item_Checklist from "../../models/item_checklist.entity";
 
 export default class itemChecklistController {
     static async store(req: Request, res: Response) {
-        const { description, checklist, item_survey } = req.body;
+        const { description, item_survey } = req.body;
         const { authorization } = req.headers;
 
         if (!authorization) {
@@ -19,7 +19,6 @@ export default class itemChecklistController {
 
         const item_check = new Item_check()
         item_check.description = description
-        item_check.checklist = checklist
         item_check.item_survey = item_survey
 
         await item_check.save()
@@ -75,7 +74,7 @@ export default class itemChecklistController {
     }
     static async update(req: Request, res: Response) {
         const { id } = req.params
-        const { description, checklist, item_survey } = req.body
+        const { description, item_survey } = req.body
         const { authorization } = req.headers;
 
         if (!authorization) {
@@ -95,7 +94,6 @@ export default class itemChecklistController {
             return res.status(404).json({ erro: 'Não encontrado' })
         }
         itens_check.description = description
-        itens_check.checklist = checklist
         itens_check.item_survey = item_survey
         await itens_check.save()
         return res.status(204).json()

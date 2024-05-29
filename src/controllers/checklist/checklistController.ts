@@ -69,12 +69,6 @@ export default class ChecklistController {
             return res.status(404).json({ error: 'Não encontrado' });
         }
 
-        if (checklist.item_checklist && checklist.item_checklist.length > 0) {
-            checklist.item_checklist.forEach(async (item) => {
-                await item.remove();
-            });
-        }
-
         await Checklist.remove(checklist);
         return res.status(204).json({ message: 'Checklist removido com sucesso' });
     }
