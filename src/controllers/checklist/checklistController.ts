@@ -17,7 +17,7 @@ export default class ChecklistController {
         }
         const checklist = new Checklist()
         checklist.description = description
-        checklist.item_checklist = item_checklist
+        checklist.item_checklist = [item_checklist]
 
         await checklist.save()
         return res.status(201).json(checklist);
