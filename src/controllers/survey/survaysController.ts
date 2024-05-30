@@ -33,7 +33,7 @@ export default class SurveysController {
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
-        const surveys = await Survey.find({ relations: ['item_survey', 'user', 'equipment', 'equipment.checklist', 'equipment.checklist.item_checklist'] });
+        const surveys = await Survey.find({ relations: ['item_survey', 'item_survey', 'user', 'equipment', 'equipment.checklist', 'equipment.checklist.item_checklist'] });
         return res.status(200).json(surveys);
     }
 
@@ -48,7 +48,7 @@ export default class SurveysController {
         if (!id || isNaN(Number(id))) {
             return res.status(400).json({ message: 'ID é obrigatório' });
         }
-        const surveys = await Survey.find({ where: { id_survey: Number(id) }, relations: ['item_survey'] });
+        const surveys = await Survey.find({ where: { id_survey: Number(id) }, relations: ['item_survey', 'item_survey', 'user', 'equipment', 'equipment.checklist', 'equipment.checklist.item_checklist'] });
         //const survey = await Survey.findOne({ where: { id_survey: Number(id) }, relations: ['item_survey'] })
 
         if (!surveys) {
