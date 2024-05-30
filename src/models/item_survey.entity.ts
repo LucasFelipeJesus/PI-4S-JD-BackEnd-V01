@@ -14,7 +14,7 @@ export default class ItemSurvey extends BaseEntity {
     @Column()
     status!: boolean;
 
-    @OneToMany(() => Survey, survey => survey.item_survey)
+    @ManyToOne(() => Survey, survey => survey.item_survey)
     survey?: Survey;
 
     @OneToMany(() => Evidence, evidence => evidence.item_survey)

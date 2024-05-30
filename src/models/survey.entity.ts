@@ -24,7 +24,7 @@ export default class Survey extends BaseEntity {
     @ManyToOne(() => Equipment, equipment => equipment.survey)
     equipment?: Equipment[];
 
-    @ManyToOne(() => ItemSurvey, item_survey => item_survey.survey)
+    @OneToMany(() => ItemSurvey, item_survey => item_survey.survey)
     item_survey?: ItemSurvey[];
 
 

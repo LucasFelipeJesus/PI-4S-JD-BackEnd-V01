@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
 
 export default class SurveysController {
     static async store(req: Request, res: Response) {
-        const { description, equipment, date_start, date_end, user, item_survey } = req.body;
+        const { description, equipment, date_start, date_end, user } = req.body;
         const { authorization } = req.headers;
 
         if (!authorization) {
@@ -21,7 +21,7 @@ export default class SurveysController {
         survey.date_end = date_end
         survey.user = user
         survey.equipment = equipment
-        survey.item_survey = item_survey
+
 
 
         await survey.save()
@@ -88,7 +88,7 @@ export default class SurveysController {
 
     static async update(req: Request, res: Response) {
         const { id } = req.params
-        const { description, equipment, date_start, date_end, user, item_survey } = req.body;
+        const { description, equipment, date_start, date_end, user } = req.body;
         const { authorization } = req.headers
 
         if (!authorization) {
@@ -113,7 +113,7 @@ export default class SurveysController {
         survey.date_end = date_end
         survey.user = user
         survey.equipment = equipment
-        survey.item_survey = item_survey
+
 
         await survey.save()
         return res.status(200).json(survey)

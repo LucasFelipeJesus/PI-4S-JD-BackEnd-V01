@@ -5,7 +5,7 @@ import Evidence from '../../models/evidence.entity';
 
 export default class ItemSurveyController {
     static async store(req: Request, res: Response) {
-        const { description, status, evidence } = req.body;
+        const { description, status, evidence, survey } = req.body;
         const { authorization } = req.headers;
 
         if (!authorization) {
@@ -19,6 +19,7 @@ export default class ItemSurveyController {
         item_survey.description = description
         item_survey.status = status
         item_survey.evidence = evidence
+        item_survey.survey = survey
 
         await item_survey.save()
         return res.status(201).json(item_survey);
@@ -76,7 +77,7 @@ export default class ItemSurveyController {
 
     static async update(req: Request, res: Response) {
         const { id } = req.params;
-        const { description, status, evidence } = req.body;
+        const { description, status, evidence, survey } = req.body;
         const { authorization } = req.headers;
 
         if (!authorization) {
@@ -101,6 +102,7 @@ export default class ItemSurveyController {
         item_survey.description = description
         item_survey.status = status
         item_survey.evidence = evidence
+        item_survey.survey = survey
 
         await item_survey.save()
         return res.status(200).json(item_survey);
