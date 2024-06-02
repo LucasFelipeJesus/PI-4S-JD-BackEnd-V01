@@ -2,8 +2,6 @@ import { BaseEntity, Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGe
 import Item_Checklist from "./item_checklist.entity";
 import Equipment from "./equipments.entity";
 
-
-
 @Entity()
 export default class Checklist extends BaseEntity {
 
