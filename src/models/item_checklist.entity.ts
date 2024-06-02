@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import Checklist from "./checklist.entity";
 import ItemSurvey from "./item_survey.entity";
 
@@ -11,8 +11,8 @@ export default class Item_Checklist extends BaseEntity {
     @Column()
     description!: string;
 
-    @ManyToOne(() => Checklist, checklist => checklist.item_checklist)
-    checklist!: Checklist;
+    @ManyToMany(() => Checklist, checklist => checklist.item_checklist)
+    checklist!: Checklist[];
 
     @ManyToOne(() => ItemSurvey, item_survey => item_survey.item_checklist)
     item_survey!: ItemSurvey[];

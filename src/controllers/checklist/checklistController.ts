@@ -1,7 +1,6 @@
 import Checklist from "../../models/checklist.entity";
+import Item_Checklist from "../../models/item_checklist.entity";
 import { Request, Response } from "express";
-
-
 
 export default class ChecklistController {
     static async store(req: any, res: any) {
@@ -9,15 +8,14 @@ export default class ChecklistController {
         const { authorization } = req.headers;
 
         if (!authorization) {
-            return res.status(400).json({ message: 'Usuário não autenticado' });
+            return res.status(400).json({ message: 'Usuário não autenticado '});
         }
 
         if (!description) {
-            return res.status(400).json({ message: 'Campos (descrição ) são obrigatórios' });
+            return res.status(400).json({ message: 'Campos (descrição) são obrigatórios' });
         }
         const checklist = new Checklist()
         checklist.description = description
-        checklist.item_checklist = [item_checklist]
 
         await checklist.save()
         return res.status(201).json(checklist);
@@ -49,10 +47,35 @@ export default class ChecklistController {
             return res.status(404).json({ erro: 'Checklist não encontrado' });
         }
         return res.json(checklist);
-
     }
+
+    static async removeItem(req: Request, res: Response) {
+        const { id, id_item_checklist } = req.params; 
+        const { authorization } = req.headers;
+
+        if (!authorization) {
+            return res.status(400).json({ message: 'Usuário não autenticado' });
+        }
+
+        if (!id || isNaN(Number(id)) || !id_item_checklist || isNaN(Number(id_item_checklist))) {
+            return res.status(400).json({ error: 'O id é obrigatório!' });
+        }
+
+        const checklist = await Checklist.findOne({ where: {id_checklist: Number(id)}, relations: ['item_checklist']});
+
+        if (!checklist) {
+            return res.status(404).json({ error: 'Não encontrado' });
+        }
+
+        checklist.item_checklist?.filter(item => item.id_item_checklist !== Number(id_item_checklist));
+        
+        checklist.save();
+
+        return res.status(204).json({ message: 'Item checklist removido com sucesso' });
+    }
+
     static async delete(req: Request, res: Response) {
-        const { id } = req.params; // const id = req.params.id  
+        const { id } = req.params; 
         const { authorization } = req.headers;
 
         if (!authorization) {
@@ -63,10 +86,14 @@ export default class ChecklistController {
             return res.status(400).json({ error: 'O id é obrigatório!' });
         }
 
-        const checklist = await Checklist.findOne({ where: { id_checklist: Number(id) }, relations: ['item_checklist'] });
+        const checklist = await Checklist.findOne({ where: { id_checklist: Number(id) }});
 
         if (!checklist) {
             return res.status(404).json({ error: 'Não encontrado' });
+        }
+        
+        if(checklist.item_checklist){
+            return res.status(400).json({ error: 'Há itens dentro desse checklist' });
         }
 
         await Checklist.remove(checklist);
@@ -82,23 +109,28 @@ export default class ChecklistController {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
 
-        if (!description) {
-            return res.status(400).json({ message: ' Descrição e id do clecklist: Campo obrigatórios' });
-        }
-
         if (!id || isNaN(Number(id))) {
             return res.status(400).json({ error: 'O id é obrigatório!' });
         }
+        
         const checklist = await Checklist.findOne({ where: { id_checklist: Number(id) }, relations: ['item_checklist'] });
 
         if (!checklist) {
             return res.status(404).json({ error: 'Não encontrado' });
         }
-        checklist.description = description;
-        checklist.item_checklist = id_item_checklist;
+
+        checklist.description = description?? checklist.description;
+
+        id_item_checklist.map( async (item : string) => { 
+            const item_checklist = await Item_Checklist.findOneBy({ id_item_checklist: Number(id_item_checklist) });
+
+            if(!item_checklist) return;
+            
+            checklist.item_checklist?.push(item_checklist);
+        });
 
         await checklist.save();
-        return res.json(checklist);
+        return res.status(200).json(checklist);
     }
 
 }
