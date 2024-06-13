@@ -1,5 +1,5 @@
 import Checklist from "../../models/checklist.entity";
-import Item_Checklist from "../../models/item_checklist.entity";
+
 import { Request, Response } from "express";
 
 export default class ChecklistController {
@@ -26,7 +26,7 @@ export default class ChecklistController {
         if (!authorization) {
             return res.status(400).json({ message: 'Usuário não autenticado' });
         }
-        const checklists = await Checklist.find({ relations: ['item_checklist', 'equipment'] });
+        const checklists = await Checklist.find({ relations: ['item_checklist'] });
         return res.status(200).json(checklists);
     }
 
@@ -102,7 +102,7 @@ export default class ChecklistController {
 
     static async update(req: Request, res: Response) {
         const { id } = req.params;
-        const { description, id_item_checklist } = req.body;
+        const { description } = req.body;
         const { authorization } = req.headers;
 
         if (!authorization) {
