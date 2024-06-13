@@ -11,8 +11,8 @@ export default class Item_Checklist extends BaseEntity {
     @Column()
     description!: string;
 
-    @ManyToMany(() => Checklist, checklist => checklist.item_checklist)
-    checklist!: Checklist[];
+    @ManyToOne(() => Checklist, checklist => checklist.item_checklist)
+    checklist!: Checklist;
 
     @ManyToOne(() => ItemSurvey, item_survey => item_survey.item_checklist)
     item_survey!: ItemSurvey[];
