@@ -65,9 +65,9 @@ export default class itemChecklistController {
             return res.status(400).json({ error: 'O id é obrigatório!' })
         }
         const itens_check = await Item_check.findOne({ where: { id_item_checklist: Number(id) }, relations: ['checklist'] })
-        
-        if(!itens_check)return res.status(400).json({error: "Não Há Item Encontrado"})//verfificação de existencia de item
-        if(itens_check?.checklist) return res.status(400).json({error: "Voce não pode apagar pois há uma checklist atrelada"})//verificação para impedir apagar item caso há checklists atreladas
+
+        if (!itens_check) return res.status(400).json({ error: "Não Há Item Encontrado" })//verfificação de existencia de item
+        if (itens_check?.checklist) return res.status(400).json({ error: "Voce não pode apagar pois há uma checklist atrelada" })//verificação para impedir apagar item caso há checklists atreladas
 
         if (!itens_check) {
             return res.status(404).json({ erro: 'Não encontrado' })
@@ -97,8 +97,9 @@ export default class itemChecklistController {
         if (!itens_check) {
             return res.status(404).json({ erro: 'Não encontrado' })
         }
-        itens_check.description = description??itens_check.description
-        itens_check.item_survey = item_survey??itens_check.item_survey
+        itens_check.description = description ?? itens_check.description
+        itens_check.item_survey = item_survey ?? itens_check.item_survey
+        itens_check.checklist = checklist ?? itens_check.checklist
         await itens_check.save()
         return res.status(204).json()
     }
