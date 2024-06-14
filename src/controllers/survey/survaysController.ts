@@ -95,7 +95,7 @@ export default class SurveysController {
             return res.status(400).json({ message: 'Usuário não autenticado' })
         }
         if (!description || !date_start) {
-            return res.status(400).json({ message: 'Campos (descrição, data de inicio e término) são obrigatórios' })
+            return res.status(400).json({ message: 'Campos (descrição e  data de inicio ) são obrigatórios' })
         }
 
         if (!id || isNaN(Number(id))) {

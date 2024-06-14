@@ -78,7 +78,7 @@ export default class itemChecklistController {
     }
     static async update(req: Request, res: Response) {
         const { id } = req.params
-        const { description, item_survey, checklist } = req.body
+        const { description, checklist } = req.body
         const { authorization } = req.headers;
 
         if (!authorization) {
@@ -98,8 +98,8 @@ export default class itemChecklistController {
             return res.status(404).json({ erro: 'Não encontrado' })
         }
         itens_check.description = description ?? itens_check.description
-        itens_check.item_survey = item_survey ?? itens_check.item_survey
         itens_check.checklist = checklist ?? itens_check.checklist
+
         await itens_check.save()
         return res.status(204).json()
     }

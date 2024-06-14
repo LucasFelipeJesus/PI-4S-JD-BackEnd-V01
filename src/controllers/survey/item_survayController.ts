@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import ItemSurvey from '../../models/item_survey.entity';
-import Evidence from '../../models/evidence.entity';
 
 
 export default class ItemSurveyController {
