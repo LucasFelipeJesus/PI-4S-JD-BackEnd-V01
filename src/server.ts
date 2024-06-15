@@ -10,8 +10,9 @@ const port = process.env.PORT || 3000
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-    origin: '*', // libera para todos os domínios
-    //origin: ['http://localhost:3000', 'https://meuapp.com'], // libera para os domínios informados
+    // origin: '*', // libera para todos os domínios
+    // origin: ['http://localhost:3000', 'https://meuapp.com'], // libera para os domínios informados
+    origin: ['http://localhost:3000', 'http://localhost:5173', /\.onrender\.com$/],
     credentials: true
 }))
 app.use(routes)
