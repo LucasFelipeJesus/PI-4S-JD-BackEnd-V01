@@ -80,6 +80,7 @@ export default class EquipmentsController {
 
         if (equipment.checklist) {
             await equipment.checklist.remove();
+            return res.status(204).json({ message: 'checklist removido com sucesso' });
         }
         await Equipment.remove(equipment);
         return res.status(204).json({ message: 'Equipamento removido com sucesso' });

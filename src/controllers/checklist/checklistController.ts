@@ -1,6 +1,7 @@
 import Checklist from "../../models/checklist.entity";
 
 import { Request, Response } from "express";
+import Item_Checklist from "../../models/item_checklist.entity";
 
 export default class ChecklistController {
     static async store(req: any, res: any) {
@@ -86,16 +87,18 @@ export default class ChecklistController {
             return res.status(400).json({ error: 'O id é obrigatório!' });
         }
 
-        const checklist = await Checklist.findOne({ where: { id_checklist: Number(id) } });
+        const checklist = await Checklist.findOne({ where: { id_checklist: Number(id) }, relations: ['item_checklist'] });
 
         if (!checklist) {
             return res.status(404).json({ error: 'Não encontrado' });
         }
 
         if (checklist.item_checklist) {
-            return res.status(400).json({ error: 'Há itens dentro desse checklist' });
-        }
+            for (let i = 0;i < checklist.item_checklist.length;i++) {
+                await Item_Checklist.remove(checklist.item_checklist[i]);
+            }
 
+        }
         await Checklist.remove(checklist);
         return res.status(204).json({ message: 'Checklist removido com sucesso' });
     }
