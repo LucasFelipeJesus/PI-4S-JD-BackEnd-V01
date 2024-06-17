@@ -12,7 +12,7 @@ app.use(cookieParser())
 app.use(cors({
     // origin: '*', // libera para todos os domínios
     // origin: ['http://localhost:3000', 'https://meuapp.com'], // libera para os domínios informados
-    origin: ['http://localhost:3000', 'http://localhost:5173', /\.onrender\.com$/],
+    origin: ['http://localhost:3000', 'http://localhost:5173', 'https://pi-4-s-jd-front-end-v01.vercel.app'],
     credentials: true
 }))
 app.use(routes)
