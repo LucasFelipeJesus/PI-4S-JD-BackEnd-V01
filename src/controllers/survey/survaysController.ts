@@ -82,6 +82,15 @@ export default class SurveysController {
             })
         }
 
+        if (survey.equipment) {
+            await survey.equipment.remove()
+        }
+
+        if (survey.user) {
+            return res.status(400).json({ message: 'Usuário vinculado e não pode ser removido' })
+
+        }
+
         await Survey.remove(survey)
         return res.status(204).json({ message: 'Vistoria removida com sucesso' })
     }
