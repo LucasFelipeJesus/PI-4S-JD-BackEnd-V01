@@ -77,9 +77,9 @@ export default class SurveysController {
         }
 
         if (survey.item_survey && survey.item_survey.length > 0) {
-            await survey.item_survey.forEach(async item => {
-                await item.remove()
-            })
+            for (let i = 0;i < survey.item_survey.length;i++) {
+                await survey.item_survey[i].remove()
+            }
         }
 
         if (survey.equipment) {
